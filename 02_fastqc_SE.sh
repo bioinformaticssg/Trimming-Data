@@ -20,6 +20,7 @@ SE_DIR=${DIR}/single_end_data
 DATA_DIR_SE=${SE_DIR}/single_end_fastq_data
 SE_DATA_QC=${SE_DIR}/SE_fastqc_result_files
 SE_QC_HTML=${SE_DATA_QC}/SE_fastqc_result_files_html_only
+HTML=SE_fastqc_result_files_html_only
 
 mkdir -p ${SE_DATA_QC}
 mkdir -p ${SE_QC_HTML}
@@ -35,4 +36,4 @@ done
 # Here we are compressing the HTML result file using the program tar
 # -C flag prevents the parent directories from being included in the archive
 # -csvf (c)reates archive, uses g(z)ip for compression, (v)erbosely shows the .tar file progress, (f)ilename appears next in the command
-tar -C ${SE_DATA_QC} -czvf ${SE_QC_HTML}.tar.gz ${SE_QC_HTML}
+tar -C ${SE_DATA_QC} -czvf ${HTML}.tar.gz ${HTML}
