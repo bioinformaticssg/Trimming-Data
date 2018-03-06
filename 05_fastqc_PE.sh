@@ -20,11 +20,10 @@ DIR=/data/users/$USER/BioinformaticsSG/Trimming-Data
 PE_DIR=${DIR}/paired_end_data
 
 PE_DATA_QC=${PE_DIR}/PE_fastqc_result_files
-PE_QC_HTML=${TRIM_DATA_PE_QC}/PE_fastqc_result_files_html_only
+PE_QC_HTML=${PE_DATA_QC}/PE_fastqc_result_files_html_only
 
 
 mkdir -p ${PE_DIR}
-
 mkdir -p ${PE_DATA_QC}
 mkdir -p ${PE_QC_HTML}
 
