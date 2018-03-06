@@ -40,5 +40,3 @@ done
 
 # I am compressing the directory containing all the html files into one file
 tar -C ${PE_DATA_QC} -czvf ${PE_QC_HTML}.tar.gz ${PE_QC_HTML} 
-
-
