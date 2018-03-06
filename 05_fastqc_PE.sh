@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#$ -N trim_qc_PE           # name of the job
-#$ -o /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_qc_PE.out   # contains what would normally be printed to stdout
-#$ -e /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_qc_PE.err   # file name to print standard error messages to. 
+#$ -N fastqc_PE             # name of the job
+#$ -o /data/users/$USER/BioinformaticsSG/Trimming-Data/fastqc_PE.out   # contains what would normally be printed to stdout
+#$ -e /data/users/$USER/BioinformaticsSG/Trimming-Data/fastqc_PE.err   # file name to print standard error messages to. 
 #$ -q free64,som,asom       # request cores from the free64, som, asom queues.
 #$ -pe openmp 8-64          # request parallel environment. You can include a minimum and maximum core count.
 #$ -m beas                  # send you email of job status (b)egin, (e)rror, (a)bort, (s)uspend
@@ -14,7 +14,7 @@ module load blcr
 module load fastqc/0.11.7
 
 
-DATA_DIR=/data/users/sborrego/BioinformaticsSG/griffith_data/reads
+DATA_DIR=/data/users/$USER/BioinformaticsSG/griffith_data/reads
 
 DIR=/data/users/$USER/BioinformaticsSG/Trimming-Data
 PE_DIR=${DIR}/paired_end_data
