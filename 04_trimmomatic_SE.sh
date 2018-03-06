@@ -1,15 +1,14 @@
 #!/bin/bash
 
-#$ -N trim_qc_SE          # name of the job
-#$ -o /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_qc_SE.out   # contains what would normally be printed to stdout (the$
-#$ -e /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_qc_SE.err   # file name to print standard error messages to. These m$
+#$ -N trim_SE          		# name of the job
+#$ -o /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_SE.out   # contains what would normally be printed to stdout (the$
+#$ -e /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_SE.err   # file name to print standard error messages to. These m$
 #$ -q free64,som,asom       # request cores from the free64, som, asom queues.
 #$ -pe openmp 8-64          # request parallel environment. You can include a minimum and maximum core count.
 #$ -m beas                  # send you email of job status (b)egin, (e)rror, (a)bort, (s)uspend
 #$ -ckpt blcr               # (c)heckpoint: writes a snapshot of a process to disk, (r)estarts the process after the checkpoint is c$
 
 module load blcr
-module load fastqc/0.11.7
 
 set -euxo pipefail
 
@@ -20,7 +19,7 @@ DATA_DIR_SE=${SE_DIR}/single_end_fastq_data
 
 TRIM_DATA_SE=${SE_DIR}/SE_trimmed_data
 TRIM_DATA_SE_QC=${SE_DIR}/SE_trimmed_data_QC
-SE_QC_HTML=${TRIM_DATA_SE_QC}/SE_trimmed_data_QC_html_only
+SE_QC_HTML=${TRIM_DATA_SE_QC}/SE_trimmed_data_QC_html
 
 TRIMMOMATIC_DIR=/data/apps/trimmomatic/0.35/trimmomatic-0.35.jar 
 
@@ -40,25 +39,14 @@ for SAMPLE in `find ${DATA_DIR_SE} -name \*.fastq\*`; do
 	echo "*** Trimming: ${SAMPLE}"
 	echo "`basename ${SAMPLE}` Summary" >> $RUNLOG
 
-	java -jar ${TRIMMOMATIC_DIR} \
-	SE \
+	java -jar ${TRIMMOMATIC_DIR} SE \
 	-threads 8 \
 	${SAMPLE} \
 	${OUTPUT} \
 	${TRIMMER} \
 	2>> ${RUNLOG}
 
-	fastqc ${OUTPUT} \
-	--outdir ${TRIM_DATA_SE_QC}
-
-	mv ${TRIM_DATA_SE_QC}/*.html ${SE_QC_HTML}
 done
-
-# Here we are compressing the HTML result file using the program tar
-# -C flag prevents the parent directories from being included in the archive
-# -csvf (c)reates archive, uses g(z)ip for compression, (v)erbosely shows the .tar file progress, (f)ilename appears next in the command
-tar -C ${TRIM_DATA_SE_QC} -czvf ${SE_QC_HTML}.tar.gz ${SE_QC_HTML}
-
 
 # Some notes on the trimmer setting:
 

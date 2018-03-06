@@ -8,6 +8,8 @@
 #$ -m beas                  # send you email of job status (b)egin, (e)rror, (a)bort, (s)uspend
 #$ -ckpt blcr               # (c)heckpoint: writes a snapshot of a process to disk, (r)estarts the process after the checkpoint is c$
 
+set -euxo pipefail
+
 module load blcr
 module load SRAToolKit
 
@@ -15,13 +17,13 @@ module load SRAToolKit
 DIR=/data/users/$USER/BioinformaticsSG/Trimming-Data
 SE_DIR=${DIR}/single_end_data
 
-DATA_SRA_SE=${SE_DIR}/SE_sra_data
-DATA_DIR_SE=${SE_DIR}/SE_fq_data
+DATA_SRA_SE=${SE_DIR}/single_end_sra_data
+DATA_DIR_SE=${SE_DIR}/single_end_fastq_data
 
 # Here we are making two new directories, DATA_SRA is for our sra data and DATA_FQ is for the fastq file
-mkdir ${SE_DIR}
-mkdir ${DATA_SRA_SE}
-mkdir ${DATA_DIR_SE}
+mkdir -p ${SE_DIR}
+mkdir -p ${DATA_SRA_SE}
+mkdir -p ${DATA_DIR_SE}
 
 # Here we are changing our current directory to the DATA directory
 cd ${DATA_SRA_SE}
@@ -40,3 +42,4 @@ for ID in `seq ${nstart_seq} ${nstop_seq}`; do
         wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/${PREFIX}/${BASE}/${SRA_FILE}/${SRA_FILE}.sra
         fastq-dump --outdir ${DATA_DIR_SE} --gzip -X 1000 ${DATA_SRA_SE}/${SRA_FILE}.sra
 done
+

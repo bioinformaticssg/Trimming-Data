@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#$ -N trim_qc_PE           # name of the job
-#$ -o /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_qc_PE.out   # contains what would normally be printed to stdout
-#$ -e /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_qc_PE.err   # file name to print standard error messages to. 
+#$ -N trim_PE               # name of the job
+#$ -o /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_PE.out   # contains what would normally be printed to stdout (the$
+#$ -e /data/users/$USER/BioinformaticsSG/Trimming-Data/trim_PE.err   # file name to print standard error messages to. These m$
 #$ -q free64,som,asom       # request cores from the free64, som, asom queues.
 #$ -pe openmp 8-64          # request parallel environment. You can include a minimum and maximum core count.
 #$ -m beas                  # send you email of job status (b)egin, (e)rror, (a)bort, (s)uspend
@@ -11,7 +11,6 @@
 set -euxo pipefail
 
 module load blcr
-module load fastqc/0.11.7
 
 
 DATA_DIR=/data/users/sborrego/BioinformaticsSG/griffith_data/reads
@@ -20,16 +19,11 @@ DIR=/data/users/$USER/BioinformaticsSG/Trimming-Data
 PE_DIR=${DIR}/paired_end_data
 
 TRIM_DATA_PE=${PE_DIR}/PE_trimmed_data
-TRIM_DATA_PE_QC=${PE_DIR}/PE_trimmed_data_QC
-PE_QC_HTML=${TRIM_DATA_PE_QC}/PE_trimmed_data_QC_html_only
 
 TRIMMOMATIC_DIR=/data/apps/trimmomatic/0.35/trimmomatic-0.35.jar 
 
 mkdir -p ${PE_DIR}
-
 mkdir -p ${TRIM_DATA_PE}
-mkdir -p ${TRIM_DATA_PE_QC}
-mkdir -p ${PE_QC_HTML}
 
 
 # TRIMMOMATIC for paired end samples
@@ -58,22 +52,8 @@ do
         -baseout ${OUTPUT} \
         ${TRIMMER} \
         2>> $RUNLOG
-
      done
 done
-
-# FastQC on  trimmed data - paired data files only as indicated by the '\*P.\*'
-
-for SAMPLE in `find ${TRIM_DATA_PE} -name \*P.\*`; do
-    fastqc ${SAMPLE} \
-    --outdir ${TRIM_DATA_PE_QC}
-
-    # I am moving all the html files to a new directory
-    mv ${TRIM_DATA_PE_QC}/*.html ${PE_QC_HTML}
-done
-
-# I am compressing the directory containing all the html files into one file
-tar -C ${TRIM_DATA_PE_QC} -czvf ${PE_QC_HTML}.tar.gz ${PE_QC_HTML} 
 
 
 # Some notes on the trimmer setting:
@@ -91,3 +71,9 @@ tar -C ${TRIM_DATA_PE_QC} -czvf ${PE_QC_HTML}.tar.gz ${PE_QC_HTML}
 
 # MINLEN:<length>
 # Drop reads which are less than 36 bases long after these steps
+
+
+
+
+
+
