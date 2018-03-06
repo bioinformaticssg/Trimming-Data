@@ -35,7 +35,7 @@ echo "Run by `whoami` on `date`" > ${RUNLOG}
 for SAMPLE in `find ${DATA_DIR_SE} -name \*.fastq\*`; do
 	OUTPUT=${TRIM_DATA_SE}/trimmed_`basename ${SAMPLE}`
 
-	TRIMMER="HEADCROP:13 LEADING:3 TRAILING:1 SLIDINGWINDOW:4:15 MINLEN:36"
+	TRIMMER="HEADCROP:1 LEADING:3 TRAILING:1 SLIDINGWINDOW:4:15 MINLEN:36"
 
 	echo "*** Trimming: ${SAMPLE}"
 	echo "`basename ${SAMPLE}` Summary" >> $RUNLOG
